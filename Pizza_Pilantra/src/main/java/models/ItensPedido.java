@@ -28,4 +28,12 @@ public class ItensPedido {
     @ManyToOne
     private Pizza Pizza_id;
 
+    public ItensPedido(String tamanho, Integer quantidade, Pizza Pizza_id, Borda borda_id)
+    {
+
+    }
+
+    public ItensPedido() {
+
+    }
 }

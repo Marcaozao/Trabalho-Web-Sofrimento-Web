@@ -29,4 +29,17 @@ public class Cliente {
 
     private Date data_nascimento;
 
+    public Cliente(String nome, String telefone, String cpf, String endereco, Date data_nascimento)
+    {
+
+        this.nome = nome;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.endereco = endereco;
+
+    }
+
+    public Cliente() {
+
+    }
 }

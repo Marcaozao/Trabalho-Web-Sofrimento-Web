@@ -34,4 +34,31 @@ public class ClienteDao {
 
     }
 
+    public Cliente buscar_por_nome(String nome)
+    {
+
+        Cliente cliente = null;
+
+        try
+        {
+
+            cliente = (Cliente) em.createQuery("from Cliente where nome = :nome", Cliente.class)
+                    .setParameter("nome", nome).getSingleResult();
+
+            return cliente;
+
+        }
+        catch (Exception e)
+        {
+
+            e.printStackTrace();
+            return null;
+
+        }
+        finally {
+            em.close();
+        }
+
+    }
+
 }

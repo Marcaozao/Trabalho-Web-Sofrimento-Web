@@ -24,12 +24,16 @@ public class Pedido {
 
     private Double valor_total;
 
-    private String observacao;
+    private String observacoes;
 
     private String status;
 
     public Pedido(List<ItensPedido> itens, Cliente cliente_id, Double valor_total, String observacao)
     {
+
+    }
+
+    public Pedido() {
 
     }
 

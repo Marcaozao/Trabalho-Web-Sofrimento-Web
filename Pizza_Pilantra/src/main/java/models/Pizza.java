@@ -19,4 +19,12 @@ public class Pizza {
 
     private String sabor;
 
+    public Pizza(String sabor)
+    {
+        this.sabor = sabor;
+    }
+
+    public Pizza() {
+
+    }
 }

@@ -19,4 +19,11 @@ public class Borda {
 
     private String sabor;
 
+    public Borda(String sabor) {
+        this.sabor = sabor;
+    }
+
+    public Borda() {
+
+    }
 }
