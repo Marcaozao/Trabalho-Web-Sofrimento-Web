@@ -223,11 +223,46 @@ public class PedidoSIB implements PedidoSEI
 
             Pedido pedido = dao.buscar_por_id(id_pedido);
 
-            return "";
+            return "O status desse pedido é: " + pedido.getStatus();
+
+        }
+        else
+        {
+
+            return "Esse pedido não existe!";
 
         }
 
-        return null;
+    }
+
+    @Override
+    public String consultar_todos() {
+
+        try
+        {
+
+            PedidoDao dao = new PedidoDao();
+
+            List<Pedido> pedidos = dao.buscar_todos();
+
+            StringBuilder mensagem = new StringBuilder();
+
+            for(int i = 0; i < pedidos.size(); i++)
+            {
+
+                mensagem.append("O status do pedido ").append(i + 1).append(" é: ").append(pedidos.get(i).getStatus()).append("\n");
+
+            }
+
+            return mensagem.toString();
+
+        }
+        catch(Exception e)
+        {
+
+            return "Não foi possível consultar todos os pedidos";
+
+        }
 
     }
 

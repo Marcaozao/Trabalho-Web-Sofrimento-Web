@@ -24,7 +24,6 @@ public class PizzaPilantraPublicher {
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-        // Agenda a tarefa:
         executor.scheduleAtFixedRate(
                 () -> {
 
@@ -34,12 +33,11 @@ public class PizzaPilantraPublicher {
 
                     System.out.println( quant + " status atualizados com sucesso!");
                 },
-                1, // Delay inicial (0 = começa imediatamente)
-                1, // Intervalo de repetição
-                TimeUnit.MINUTES // Unidade de tempo (minutos)
+                1,
+                1,
+                TimeUnit.MINUTES
         );
-
-//Borda, Pizza, Pedido, Cliente, Itens_Pedido
+        
     }
 
 }

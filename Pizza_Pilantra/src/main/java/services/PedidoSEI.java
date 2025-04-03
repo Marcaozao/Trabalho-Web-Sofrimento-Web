@@ -13,5 +13,7 @@ public interface PedidoSEI {
 
     String consultar_pedido(@WebParam(name = "id_pedido") Integer id_pedido);
 
+    String consultar_todos();
+
 }
 //para fazer o que muda os status eu vou pegar uma lista com todos os ids dos pedidos e com os status e vou fazer um switch para substuir os status da lista e colocar no banco de dados usando o id da sua mesma posição na lista
