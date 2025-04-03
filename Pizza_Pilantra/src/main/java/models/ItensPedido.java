@@ -20,16 +20,22 @@ public class ItensPedido {
 
     @ManyToOne
     @JoinColumn
-    private Pedido pedido_id;
+    private Pedido pedido;
 
     @ManyToOne
-    private Borda borda_id;
+    private Borda borda;
 
     @ManyToOne
-    private Pizza Pizza_id;
+    private Pizza pizza;
 
-    public ItensPedido(String tamanho, Integer quantidade, Pizza Pizza_id, Borda borda_id)
+    public ItensPedido(String tamanho, Integer quantidade, Pizza pizza, Borda borda, double valor_unitario)
     {
+
+        this.tamanho = tamanho;
+        this.quantidade = quantidade;
+        this.pizza = pizza;
+        this.borda = borda;
+        this.valor_unitario = valor_unitario;
 
     }
 

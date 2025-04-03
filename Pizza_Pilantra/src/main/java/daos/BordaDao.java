@@ -2,6 +2,7 @@ package daos;
 
 import jakarta.persistence.EntityManager;
 import models.Borda;
+import models.Cliente;
 import models.Pizza;
 import utils.EntityManagerUtil;
 
@@ -30,6 +31,32 @@ public class BordaDao {
         }
         finally {
             em.close();
+        }
+
+    }
+
+    public void salvar(Borda borda) {
+
+        try
+        {
+
+            em.getTransaction().begin();
+            em.persist(borda);
+            em.getTransaction().commit();
+
+        }
+        catch(Exception e)
+        {
+
+            em.getTransaction().rollback();
+            e.printStackTrace();
+
+        }
+        finally
+        {
+
+            em.close();
+
         }
 
     }

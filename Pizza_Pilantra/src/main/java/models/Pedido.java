@@ -16,11 +16,11 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "pedido_id")
+    @OneToMany
     private List<ItensPedido> itens;
 
     @ManyToOne
-    private Cliente cliente_id;
+    private Cliente cliente;
 
     private Double valor_total;
 
@@ -28,8 +28,13 @@ public class Pedido {
 
     private String status;
 
-    public Pedido(List<ItensPedido> itens, Cliente cliente_id, Double valor_total, String observacao)
+    public Pedido(List<ItensPedido> itens, Cliente cliente, Double valor_total, String observacao)
     {
+
+        this.itens = itens;
+        this.cliente = cliente;
+        this.valor_total = valor_total;
+        this.observacoes = observacao;
 
     }
 

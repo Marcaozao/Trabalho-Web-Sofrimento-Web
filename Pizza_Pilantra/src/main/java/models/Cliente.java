@@ -36,6 +36,7 @@ public class Cliente {
         this.telefone = telefone;
         this.cpf = cpf;
         this.endereco = endereco;
+        this.data_nascimento = data_nascimento;
 
     }
 

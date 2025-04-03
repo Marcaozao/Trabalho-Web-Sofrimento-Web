@@ -1,11 +1,10 @@
 package services;
 
-import daos.BordaDao;
-import daos.ClienteDao;
-import daos.PizzaDao;
+import daos.*;
 import jakarta.jws.WebService;
 import models.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,11 +16,9 @@ public class PedidoSIB implements PedidoSEI
     public String criarPedido(String cliente_nome, String observacoes, List<String> tamanho, List<Integer> quantidade, List<String> sabor_borda, List<String> sabor_pizza) {
 
         ClienteDao cliente_dao = new ClienteDao();
-        PizzaDao pizza_dao = new PizzaDao();
-        BordaDao borda_dao = new BordaDao();
 
-        Pizza pizza = null;
-        Borda borda = null;
+        List<Pizza> pizza = new ArrayList<>();
+        List<Borda> borda = new ArrayList<>();
         Cliente cliente = null;
 
         if (!(tamanho.size() == quantidade.size() && quantidade.size() == sabor_borda.size() && sabor_borda.size() == sabor_pizza.size()))
@@ -31,8 +28,7 @@ public class PedidoSIB implements PedidoSEI
 
         }
 
-        if(cliente_dao.buscar_por_nome(cliente_nome) == null)
-        {
+        if (cliente_dao.buscar_por_nome(cliente_nome) == null) {
 
             return "Cliente não existe!";
 
@@ -40,12 +36,16 @@ public class PedidoSIB implements PedidoSEI
         else
         {
 
+            cliente_dao = new ClienteDao();
+
             cliente = cliente_dao.buscar_por_nome(cliente_nome);
 
         }
 
         for(int i = 0; i < sabor_pizza.size(); i++)
         {
+
+            PizzaDao pizza_dao = new PizzaDao();
 
             if(pizza_dao.buscar_por_sabor(sabor_pizza.get(i)) == null)
             {
@@ -56,7 +56,9 @@ public class PedidoSIB implements PedidoSEI
             else
             {
 
-                pizza = pizza_dao.buscar_por_sabor(sabor_pizza.get(i));
+                pizza_dao = new PizzaDao();
+
+                pizza.add(pizza_dao.buscar_por_sabor(sabor_pizza.get(i)));
 
             }
 
@@ -64,6 +66,8 @@ public class PedidoSIB implements PedidoSEI
 
         for(int i = 0; i < sabor_borda.size(); i++)
         {
+
+            BordaDao borda_dao = new BordaDao();
 
             if(borda_dao.buscar_por_sabor(sabor_borda.get(i)) == null)
             {
@@ -74,7 +78,11 @@ public class PedidoSIB implements PedidoSEI
             else
             {
 
-                borda = borda_dao.buscar_por_sabor(sabor_borda.get(i));
+                borda_dao = new BordaDao();
+
+                borda.add(borda_dao.buscar_por_sabor(sabor_borda.get(i)));
+
+                System.out.println(borda.get(i).getSabor());
 
             }
             
@@ -82,16 +90,144 @@ public class PedidoSIB implements PedidoSEI
 
         ItensPedido itens[] = new ItensPedido[tamanho.size()];
 
+        double valor_total = 0;
+
         for(int i = 0; i < tamanho.size(); i++)
         {
+            
+            double valor_unitario = 0;
+            
+            switch(pizza.get(i).getId())
+            {
+                
+                case 1:
+                    
+                    valor_unitario += 45.00;
 
-            itens[i] = new ItensPedido(tamanho.get(i), quantidade.get(i), pizza, borda);
+                break;
+                case 2:
+
+                    valor_unitario += 40.00;
+
+                break;
+                case 3:
+
+                    valor_unitario += 50.00;
+
+                break;
+                case 4:
+
+                    valor_unitario += 70.00;
+
+                break;
+
+            }
+
+            switch(borda.get(i).getId())
+            {
+
+                case 1:
+
+                    valor_unitario += 15.00;
+
+                    break;
+                case 2:
+
+                    valor_unitario += 5.00;
+
+                    break;
+                case 3:
+
+                    valor_unitario += 10.00;
+
+                    break;
+                case 4:
+
+                    valor_unitario += 25.00;
+
+                    break;
+
+            }
+
+            switch(tamanho.get(i))
+            {
+
+                case "Pequena":
+
+                    valor_unitario -= 20.00;
+
+                break;
+                case "Média":
+
+                    valor_unitario = valor_unitario;
+
+                break;
+                case "Grande":
+
+                    valor_unitario += 20.00;
+
+                break;
+                case "Família":
+
+                    valor_unitario += 50.00;
+
+                break;
+                default:
+
+                    return "A pizza precisa ter um tamanho cadastrado";
+
+            }
+
+            try
+            {
+
+                valor_total += valor_unitario * quantidade.get(i);
+
+            }
+            catch(Exception e) {
+
+                e.printStackTrace();
+                return "Deu um problema no cauculo do valor total";
+
+            }
+
+            ItensPedidoDao salvarDao = new ItensPedidoDao();
+
+            itens[i] = new ItensPedido(tamanho.get(i), quantidade.get(i), pizza.get(i), borda.get(i), valor_unitario);
+
+            salvarDao.salvar(itens[i]);
 
         }
 
-        Pedido pedido = new Pedido(Arrays.asList(itens), cliente, 0.0, "");
+        Pedido pedido = new Pedido(Arrays.asList(itens), cliente, valor_total, "");
 
-        return "Pedido efetuado com sucesso!";
+        pedido.setStatus("Recebido");
+
+        PedidoDao dao = new PedidoDao();
+
+        dao.salvar(pedido);
+
+        return "Pedido efetuado com sucesso! Vai custar " + valor_total;
+
+    }
+
+    @Override
+    public String consultar_pedido(Integer id_pedido) {
+
+        PedidoDao dao = new PedidoDao();
+
+        if(dao.buscar_por_id(id_pedido) != null)
+        {
+
+            dao = new PedidoDao();
+
+            Pedido pedido = dao.buscar_por_id(id_pedido);
+
+            return "";
+
+        }
+
+        return null;
 
     }
 

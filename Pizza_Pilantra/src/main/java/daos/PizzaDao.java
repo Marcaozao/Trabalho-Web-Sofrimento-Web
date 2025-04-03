@@ -10,6 +10,32 @@ public class PizzaDao
 
     EntityManager em = EntityManagerUtil.getEm();
 
+    public void salvar(Pizza pizza) {
+
+        try
+        {
+
+            em.getTransaction().begin();
+            em.persist(pizza);
+            em.getTransaction().commit();
+
+        }
+        catch(Exception e)
+        {
+
+            em.getTransaction().rollback();
+            e.printStackTrace();
+
+        }
+        finally
+        {
+
+            em.close();
+
+        }
+
+    }
+
     public Pizza buscar_por_sabor(String sabor)
     {
 
